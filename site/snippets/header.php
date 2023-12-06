@@ -21,7 +21,7 @@
         is blogging and <?= getLastFm(); ?>
       </p>
       
-      <form action="/subscribe" method="POST" class="signup-form mLg:flex">
+      <form action="/subscribe" name="subscribe" method="POST" class="signup-form mLg:flex">
         <input
             type="email"
             id="email"
