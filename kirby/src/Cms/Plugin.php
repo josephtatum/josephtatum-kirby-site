@@ -23,9 +23,8 @@ use Throwable;
  * @copyright Bastian Allgeier
  * @license   https://getkirby.com/license
  */
-class Plugin
+class Plugin extends Model
 {
-	protected PluginAssets $assets;
 	protected array $extends;
 	protected string $name;
 	protected string $root;
@@ -35,45 +34,25 @@ class Plugin
 	protected UpdateStatus|null $updateStatus = null;
 
 	/**
-	 * @param string $name Plugin name within Kirby (`vendor/plugin`)
-	 * @param array $extends Associative array of plugin extensions
-	 *
-	 * @throws \Kirby\Exception\InvalidArgumentException If the plugin name has an invalid format
-	 */
-	public function __construct(string $name, array $extends = [])
-	{
-		static::validateName($name);
-
-		$this->name    = $name;
-		$this->extends = $extends;
-		$this->root    = $extends['root'] ?? dirname(debug_backtrace()[0]['file']);
-		$this->info    = empty($extends['info']) === false && is_array($extends['info']) ? $extends['info'] : null;
-
-		unset($this->extends['root'], $this->extends['info']);
-	}
-
-	/**
 	 * Allows access to any composer.json field by method call
 	 */
-	public function __call(string $key, array $arguments = null): mixed
+	public function __call(string $key, array $arguments = null)
 	{
 		return $this->info()[$key] ?? null;
 	}
 
 	/**
-	 * Returns the plugin asset object for a specific asset
+	 * @param string $name Plugin name within Kirby (`vendor/plugin`)
+	 * @param array $extends Associative array of plugin extensions
 	 */
-	public function asset(string $path): PluginAsset|null
+	public function __construct(string $name, array $extends = [])
 	{
-		return $this->assets()->get($path);
-	}
+		$this->setName($name);
+		$this->extends = $extends;
+		$this->root    = $extends['root'] ?? dirname(debug_backtrace()[0]['file']);
+		$this->info    = empty($extends['info']) === false && is_array($extends['info']) ? $extends['info'] : null;
 
-	/**
-	 * Returns the plugin assets collection
-	 */
-	public function assets(): PluginAssets
-	{
-		return $this->assets ??= PluginAssets::factory($this);
+		unset($this->extends['root'], $this->extends['info']);
 	}
 
 	/**
@@ -133,14 +112,6 @@ class Plugin
 		}
 
 		return $this->info = $info;
-	}
-
-	/**
-	 * Current $kirby instance
-	 */
-	public function kirby(): App
-	{
-		return App::instance();
 	}
 
 	/**
@@ -215,6 +186,23 @@ class Plugin
 	}
 
 	/**
+	 * Validates and sets the plugin name
+	 *
+	 * @return $this
+	 *
+	 * @throws \Kirby\Exception\InvalidArgumentException If the plugin name has an invalid format
+	 */
+	protected function setName(string $name): static
+	{
+		if (preg_match('!^[a-z0-9-]+\/[a-z0-9-]+$!i', $name) !== 1) {
+			throw new InvalidArgumentException('The plugin name must follow the format "a-z0-9-/a-z0-9-"');
+		}
+
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
 	 * Returns all available plugin metadata
 	 */
 	public function toArray(): array
@@ -274,19 +262,6 @@ class Plugin
 		}
 
 		return $this->updateStatus = new UpdateStatus($this, false, $data);
-	}
-
-	/**
-	 * Checks if the name follows the required pattern
-	 * and throws an exception if not
-	 *
-	 * @throws \Kirby\Exception\InvalidArgumentException
-	 */
-	public static function validateName(string $name): void
-	{
-		if (preg_match('!^[a-z0-9-]+\/[a-z0-9-]+$!i', $name) !== 1) {
-			throw new InvalidArgumentException('The plugin name must follow the format "a-z0-9-/a-z0-9-"');
-		}
 	}
 
 	/**

@@ -259,11 +259,8 @@ class Query
 	 * @param string $type The join type. Uses an inner join by default
 	 * @return $this
 	 */
-	public function join(
-		string $table,
-		string $on,
-		string $type = 'JOIN'
-	): static {
+	public function join(string $table, string $on, string $type = 'JOIN'): static
+	{
 		$join = [
 			'table' => $table,
 			'on'    => $on,
@@ -681,7 +678,7 @@ class Query
 		$collection = $this
 			->offset($pagination->offset())
 			->limit($pagination->limit())
-			->iterator(Collection::class)
+			->iterator('Kirby\Toolkit\Collection')
 			->all();
 
 		$this->iterator($iterator);

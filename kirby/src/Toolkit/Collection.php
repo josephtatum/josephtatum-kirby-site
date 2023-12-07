@@ -30,9 +30,6 @@ class Collection extends Iterator implements Countable
 	 * Whether the collection keys should be
 	 * treated as case-sensitive
 	 *
-	 * @todo 5.0 Check if case-sensitive can become the
-	 * default mode, see https://github.com/getkirby/kirby/pull/5635
-	 *
 	 * @var bool
 	 */
 	protected $caseSensitive = false;
@@ -70,7 +67,8 @@ class Collection extends Iterator implements Countable
 
 	/**
 	 * Improve var_dump() output
-	 * @codeCoverageIgnore
+	 *
+	 * @return array
 	 */
 	public function __debugInfo(): array
 	{
@@ -523,24 +521,21 @@ class Collection extends Iterator implements Countable
 	 * Groups the elements by a given field or callback function
 	 *
 	 * @param string|Closure $field
+	 * @param bool $i
 	 * @return \Kirby\Toolkit\Collection A new collection with an element for
 	 *                                   each group and a subcollection in
 	 *                                   each group
 	 * @throws \Exception if $field is not a string nor a callback function
 	 */
-	public function group($field, bool $caseInsensitive = true)
+	public function group($field, bool $i = true)
 	{
 		// group by field name
 		if (is_string($field) === true) {
-			return $this->group(function ($item) use ($field, $caseInsensitive) {
+			return $this->group(function ($item) use ($field, $i) {
 				$value = $this->getAttribute($item, $field);
 
 				// ignore upper/lowercase for group names
-				if ($caseInsensitive === true) {
-					return Str::lower($value);
-				}
-
-				return (string)$value;
+				return $i === true ? Str::lower($value) : (string)$value;
 			});
 		}
 
@@ -745,17 +740,14 @@ class Collection extends Iterator implements Countable
 	 * Add pagination
 	 *
 	 * @param array ...$arguments
-	 * @return $this|static a sliced set of data
+	 * @return static a sliced set of data
 	 */
 	public function paginate(...$arguments)
 	{
 		$this->pagination = Pagination::for($this, ...$arguments);
 
 		// slice and clone the collection according to the pagination
-		return $this->slice(
-			$this->pagination->offset(),
-			$this->pagination->limit()
-		);
+		return $this->slice($this->pagination->offset(), $this->pagination->limit());
 	}
 
 	/**

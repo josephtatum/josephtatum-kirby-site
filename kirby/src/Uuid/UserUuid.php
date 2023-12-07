@@ -25,16 +25,6 @@ class UserUuid extends Uuid
 	 */
 	public Identifiable|null $model;
 
-	/*
-	 * Returns the user ID
-	 * (we can rely in this case that the Uri was filled
-	 * with the model ID on initiation)
-	 */
-	public function id(): string
-	{
-		return $this->uri->host();
-	}
-
 	/**
 	 * Generator for all users
 	 *
