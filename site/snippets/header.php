@@ -42,7 +42,7 @@
       <div id="subscribeModal" class="modal bg-white w-auto	max-w-none">
         <form name="subscribe" method="POST" class="m-0">
           <input type="hidden" name="honeypot" value="" />
-          <div class="g-recaptcha mt-1 mb-1" data-sitekey="6LewEikpAAAAAFrl-ee_h8f7viG2oDuMz-IobgZj" data-callback="recaptcha_callback"></div>
+          <div class="g-recaptcha mt-1 mb-1" data-sitekey="6LewEikpAAAAAFrl-ee_h8f7viG2oDuMz-IobgZj" data-size="compact" data-callback="recaptcha_callback"></div>
         </form>
         <p id="message" style="display: hidden" class="text-black"></p>
       </div>
