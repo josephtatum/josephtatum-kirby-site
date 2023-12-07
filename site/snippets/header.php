@@ -34,20 +34,21 @@
             class="bg-white dark:bg-black border-2 dark:border-white text-black dark:text-white p-3 rounded-sm mb-2 mLg:mb-0 mLg:rounded-r-none flex-1 mLg:border-r-0 sub-input"
         />
         <input type="hidden" name="honeypot" value="" />
-        <div class="g-recaptcha" data-sitekey="6LdN8igpAAAAAFPe0yXpGDpBkxVoutnShxgxHsKa"></div>
+        <div class="g-recaptcha" data-sitekey="6LewEikpAAAAAFrl-ee_h8f7viG2oDuMz-IobgZj"></div>
+        <button id="submit" type="submit"  class="bg-black dark:bg-white text-white dark:text-black p-3 rounded-sm mLg:rounded-l-none sub-button">
+            Subscribe
+        </button>
+        <p id="message" style="display: hidden"></p>
+      </form>
+
+      <!-- <div id="ex5" class="modal">
+        <div class="g-recaptcha" data-sitekey="6LewEikpAAAAAFrl-ee_h8f7viG2oDuMz-IobgZj"></div>
         <button id="submit" type="submit" class="bg-black dark:bg-white text-white dark:text-black p-3 rounded-sm mLg:rounded-l-none sub-button">
             Subscribe
         </button>
-      </form>
-
-      <div id="ex5" class="modal">
-        <p>Thanks for clicking. That felt good.</p>
+        <p id="message" style="display: hidden"></p>
         <a href="#" rel="modal:close">Close</a>
-      </div>
-
-      <a href="#ex5" data-modal>Open a DOM element</a>
-
-      <p id="message" style="display: hidden"></p>
+      </div> -->
 
       <hr class="mt-10 mb-10 text-gray" />
     </header>

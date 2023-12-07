@@ -26,7 +26,7 @@ $(document).ready(function () {
       encode: true,
     }).done(function (res) {
       const data = JSON.parse(res);
-      console.log(data.success);
+      console.log(data);
       if (data.success) {
         $.ajax({
           type: "POST",
